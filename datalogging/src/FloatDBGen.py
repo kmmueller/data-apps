@@ -1,14 +1,19 @@
 '''
 Created on Oct 4, 2014
+Modified 2/6/2015 to include new quantities to track - ask and bid sizes, volumes
+and open interest for calls and puts.
 
 @author: mueller
 '''
 #import pandas as pd
-from sqlalchemy import  create_engine
+from sqlalchemy import create_engine
 import re
 import numpy as np
 #from scipy.signal.ltisys import step2
+#
+
 engine = create_engine("mysql+mysqlconnector://root:admin@localhost/floatbook")
+
 
 # Define the variables to generate the database table for logging.  We need the following:
 # ticker - ticker for the stock
@@ -16,11 +21,19 @@ engine = create_engine("mysql+mysqlconnector://root:admin@localhost/floatbook")
 # lowStrike - lowest strike to begin logging data
 # step - step size between strikes
 # numStrikes - number of strikes
+'''
+commenting out the interactive stuff in order to hardcode simpler stuff for debugging
 ticker = input('Enter stock ticker: ')
 expDate = input('Enter the expiration date: ')
 lowStrike = float(input('Enter the low strike: '))
 step = float(input('Enter the step size between strikes: '))
 numStrikes = float(input('Enter the number of strikes: '))
+'''
+ticker = 'INTC'
+expDate = '150220'
+lowStrike = float(30)
+step = float(1)
+numStrikes = float(6)
 print('Ticker=',ticker)
 print('Expiration Date=',expDate)
 print('low Strike=', lowStrike)
@@ -62,21 +75,29 @@ for x in (strikes):
         print('This is new x with a decimal')
     #print(m.group(0))
     callAsk=callName+str(x)+"_ask"+dataTypeFLOAT
+    callAskSize=callName+str(x)+"_asksize"+dataTypeFLOAT
     callBid=callName+str(x)+"_bid"+dataTypeFLOAT
+    callBidSize=callName+str(x)+"_bidsize"+dataTypeFLOAT
+    callVolume=callName+str(x)+"_volume"+dataTypeFLOAT
+    callOpenInt=callName+str(x)+"_openint"+dataTypeFLOAT
     callDelta=callName+str(x)+"_delta"+dataTypeFLOAT
     callTheta=callName+str(x)+"_theta"+dataTypeFLOAT
     callGamma=callName+str(x)+"_gamma"+dataTypeFLOAT
     callVega=callName+str(x)+"_vega"+dataTypeFLOAT
     callRho=callName+str(x)+"_rho"+dataTypeFLOAT
     putAsk=putName+str(x)+"_ask"+dataTypeFLOAT
+    putAskSize=putName+str(x)+"_asksize"+dataTypeFLOAT
     putBid=putName+str(x)+"_bid"+dataTypeFLOAT
+    putBidSize=putName+str(x)+"_bidsize"+dataTypeFLOAT
+    putVolume=putName+str(x)+"_volume"+dataTypeFLOAT
+    putOpenInt=putName+str(x)+"_openint"+dataTypeFLOAT
     putDelta=putName+str(x)+"_delta"+dataTypeFLOAT
     putTheta=putName+str(x)+"_theta"+dataTypeFLOAT
     putGamma=putName+str(x)+"_gamma"+dataTypeFLOAT
     putVega=putName+str(x)+"_vega"+dataTypeFLOAT
     putRho=putName+str(x)+"_rho"+dataTypeFLOAT
 
-    dataBaseColumns=(callAsk,callBid,callDelta,callTheta,callGamma,callVega,callRho,putAsk,putBid,putDelta,putTheta,putGamma,putVega,putRho)
+    dataBaseColumns=(callAsk,callAskSize,callBid,callBidSize,callVolume,callOpenInt,callDelta,callTheta,callGamma,callVega,callRho,putAsk,putAskSize,putBid,putBidSize,putVolume,putOpenInt,putDelta,putTheta,putGamma,putVega,putRho)
     for y in (dataBaseColumns):
         dataBaseColumnNames.append(y)
 print("All call & put related names:",dataBaseColumnNames)
