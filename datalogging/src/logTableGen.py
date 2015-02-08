@@ -12,7 +12,7 @@ import numpy as np
 from matplotlib.delaunay.testfuncs import steep
 #from scipy.signal.ltisys import step2
 #
-def logTableGen(ticker, exDate, lowStrike, step, numStrikes):
+def logTableGen(ticker, expDate, lowStrike, step, numStrikes):
     engine = create_engine("mysql+mysqlconnector://root:admin@localhost/floatbook")
     
     
@@ -124,13 +124,16 @@ def logTableGen(ticker, exDate, lowStrike, step, numStrikes):
     print(tableCreate)
     
     engine.execute(tableCreate)
+    return(dataTableName)
 # code to test that the function works as expected:
-ticker = 'GPRO'
-expDate = '150220'
-lowStrike = float(57.5)
-step = float(2.5)
-numStrikes = float(7)
-print("Calling function...")
-logTableGen(ticker, expDate, lowStrike,step,numStrikes)
+#===============================================================================
+# ticker = 'GPRO'
+# expDate = '150220'
+# lowStrike = float(57.5)
+# step = float(2.5)
+# numStrikes = float(7)
+# print("Calling function...")
+# logTableGen(ticker, expDate, lowStrike,step,numStrikes)
+#===============================================================================
 
 
