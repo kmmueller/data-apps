@@ -9,11 +9,11 @@ and open interest for calls and puts.
 from sqlalchemy import create_engine
 import re
 import numpy as np
-from matplotlib.delaunay.testfuncs import steep
+#from matplotlib.delaunay.testfuncs import steep
 #from scipy.signal.ltisys import step2
 #
 def logTableGen(ticker, expDate, lowStrike, step, numStrikes):
-    engine = create_engine("mysql+mysqlconnector://root:admin@localhost/floatbook")
+    #engine = create_engine("mysql+mysqlconnector://root:admin@localhost/floatbook")
     
     
     # Taking the variables to generate the database table for logging as input.  We need the following:
