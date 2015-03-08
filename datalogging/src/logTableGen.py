@@ -127,13 +127,13 @@ def logTableGen(ticker, expDate, lowStrike, step, numStrikes):
     return(dataTableName)
 # code to test that the function works as expected:
 #===============================================================================
-# ticker = 'GPRO'
-# expDate = '150220'
-# lowStrike = float(57.5)
-# step = float(2.5)
-# numStrikes = float(7)
-# print("Calling function...")
-# logTableGen(ticker, expDate, lowStrike,step,numStrikes)
+#ticker = 'GPRO'
+#expDate = '150220'
+#lowStrike = float(57.5)
+#step = float(2.5)
+#numStrikes = float(7)
+#print("Calling function...")
+#logTableGen(ticker, expDate, lowStrike,step,numStrikes)
 #===============================================================================
 
 
