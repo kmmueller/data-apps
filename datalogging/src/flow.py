@@ -19,14 +19,14 @@ while (loopDone=="no"):
     lowStrike = float(input('Enter the low strike: '))
     step = float(input('Enter the step size between strikes: '))
     numStrikes = float(input('Enter the number of strikes: '))
-    
-    #tableName=logTableGen.logTableGen(ticker, expDate, lowStrike, step, numStrikes)
-    ww=xlLogGen.xlLogGen(ticker, expDate, lowStrike, step, numStrikes,ww)
+    tableName=logTableGen.logTableGen(ticker, expDate, lowStrike, step, numStrikes)
+    ww=xlLogGen.xlLogGen(ticker, expDate, lowStrike, step, numStrikes,tableName,ww)
     #print('The table created is ', tableName)
     loopDone= input('Are you finished? Please enter yes or no. ')
-    xlFileName= input('Enter name for your new excel logging file: ')
+    
+xlFileName= input('Enter name for your new excel logging file: ')
 
-    print(xlFileName)
+print(xlFileName)
 
 ww.save(xlFileName)
 print('Congratulations - we are done. ')
