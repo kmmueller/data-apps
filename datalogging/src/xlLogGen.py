@@ -7,7 +7,7 @@ import re
 import numpy as np
 from openpyxl import Workbook
 
-def xlLogGen(ticker, expDate, lowStrike, step, numStrikes,wb):
+def xlLogGen(ticker, expDate, lowStrike, step, numStrikes,tableName,wb):
     
     # Build an array of the strike prices based on low, step and number of strikes
     # Get the max price based on steps, low, number of strikes
@@ -20,10 +20,14 @@ def xlLogGen(ticker, expDate, lowStrike, step, numStrikes,wb):
     #wb=Workbook()
     ws=wb.active
     dataItemNames=["=RTD(\"tos.rtd\", ,\"LAST\", \""+ticker+"\")"]
-    # playing with writing to openpyxl. Here I have setup the workbook object in memory, set the first sheet to active, and
-    # now am writing the first row as the ticker LAST value.  I think I can use this format to write out multiple stocks to 
-    # the same page
+    nameTable=tableName
+# now write each set of data with a header incluuding the floatbook table name and number of strikes.  This way I 
+# can simplify what I need to write in Excel to log to mysql.  Almost there.
+# 3/12/2015
+    
+    ws.append([nameTable, numStrikes])
     ws.append(dataItemNames)
+   
     xx=[]
     for x in (strikes):
         m=re.compile('\d+')
