@@ -4,7 +4,7 @@ Making a main program to call the routines and build the excel workbook.
 '''
 from openpyxl.workbook import Workbook
 '''
-Idea is to have a way to set up an arbitrary number of stocks adn generate
+Idea is to have a way to set up an arbitrary number of stocks and generate
 the excel workbook.  I will try first just looping and building one by one
 and see if this strategy works.
 first, set up the variables for one of the stocks
