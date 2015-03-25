@@ -9,22 +9,20 @@ Take existing FLOW.py module and wrap with loop so as to build a single stock ex
 
 import logTableGen
 import xlLogGen
-loopDone="no"
+
 ww=Workbook()
-while (loopDone=="no"):
-    ticker = input('Enter stock ticker: ')
-    expDate = input('Enter the expiration date: ')
-    lowStrike = float(input('Enter the low strike: '))
-    step = float(input('Enter the step size between strikes: '))
-    numStrikes = float(input('Enter the number of strikes: '))
+#ExpList = ['150327','150331','150402','150410','150417','150424','150501','150515','150619','150630','150717','150918','150930','151219','151231','160115']
+ExpList = ['150327','150331','150402','150410','150417','150424','150501','150515','150619','150630','150717','150918','150930','151219','151231','160115']
+ticker = 'SPY'
+lowStrike = float(190)
+step = float(1)
+numStrikes = float(40)  # 22 columns generated.  40 numStrikes is OK
+
+for expDate in ExpList:
     tableName=logTableGen.logTableGen(ticker, expDate, lowStrike, step, numStrikes)
     ww=xlLogGen.xlLogGen(ticker, expDate, lowStrike, step, numStrikes,tableName,ww)
-    #print('The table created is ', tableName)
-    loopDone= input('Are you finished? Please enter yes or no. ')
     
-xlFileName= input('Enter name for your new excel logging file: ')
-
+xlFileName= '%s%d%d%d.xlsx' % (ticker,lowStrike,numStrikes,step)
 print(xlFileName)
-
 ww.save(xlFileName)
-print('Congratulations - we are done. ')
+print('Congratulations - we are done.  Time for beer!')
