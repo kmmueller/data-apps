@@ -1,0 +1,100 @@
+Private Sub Log_data2()
+Dim c As Object
+Dim tablename As String
+Dim sqlStrng As String
+Dim rowOffset, columnOffset As Integer
+Dim startLocation As Range
+
+' Set the logging interval next - format is "hh:mm:ss"
+' Current default is 1 minute
+interval = "00:01:00"
+
+
+Set startLocation = Range("A1")
+tablename = startLocation.Value
+Do Until IsEmpty(startLocation)
+
+
+
+
+
+rowOffset = startLocation.Offset(, 1).Value + 1
+columnOffset = 21
+TickerLast = startLocation.Offset(1)
+'Debug.Print TickerLast
+'Debug.Print rowOffset
+
+sqlStrng = "insert into " & tablename & " values (DEFAULT, " & TickerLast & ""
+' Debug.Print sqlStrng
+For Each c In Worksheets("Sheet").Range(startLocation.Offset(2), startLocation.Offset(rowOffset, columnOffset))
+    If IsError(c.Value) Then
+        sqlStrng = "2.71828"
+    
+    ElseIf c.Value = "N/A" Then
+    sqlStrng = sqlStrng & "," & "3.1459"
+    Else
+    sqlStrng = sqlStrng & "," & c.Value
+    End If
+    
+    Next
+  sqlStrng = sqlStrng & ", DEFAULT)"
+  'Debug.Print sqlStrng
+  
+Dim oConn As ADODB.Connection
+    Set oConn = New ADODB.Connection
+    oConn.Open "DRIVER={MySQL ODBC 5.3 Unicode Driver};" & _
+        "SERVER=localhost;" & _
+        "DATABASE=floatbook;" & _
+        "USER=root;" & _
+        "PASSWORD=admin;"
+        
+' The following "if" statement is needed since the logging data to the database is
+' happening within the loop.  I check the time to see if it is during a valid
+' time interval, then execute the log.  Otherwise, it goes through the loop
+' and doesn't start logging anything until a valid time is reached.
+' Note that after one loop, it goes into the waiting loop at the bottom for
+' the set amount of time until a valid time is reached again.
+'__________________________________________________________________________
+'Need to set the proper min and max time values here
+'__________________________________________________________________________
+If Weekday(Now()) <> Saturday Or Weekday(Now()) <> Sunday Then
+   If Time() >= TimeValue("05:00:00") And Time() <= TimeValue("14:30:00") Then
+   oConn.Execute (sqlStrng)
+   Else
+   End If
+End If
+  
+tablename = startLocation.Offset(rowOffset + 1)
+Set startLocation = startLocation.Offset(rowOffset + 1)
+' Debug.Print tablename
+sqlstring = Null
+
+Loop
+' _________________________________________________________________________
+' Need to be sure to set the min and max valid time values here and within
+' the loop before the logging step occurs.
+' Seems to work fine!
+' 4-2-15
+'__________________________________________________________________________
+If Weekday(Now()) <> Saturday Or Weekday(Now()) <> Sunday Then
+  If Time() >= TimeValue("05:00:00") And Time() <= TimeValue("14:30:00") Then
+   Runtime = Now + TimeValue(interval)
+   Application.OnTime Runtime, "Log_data2"
+   Debug.Print "...Generating Data into MySQL database.   no really, go check..."
+  Else
+     Debug.Print "Waiting for correct time...one minute..."
+     Runtime = Now + TimeValue("00:01:00")
+     Application.OnTime Runtime, "Log_data2"
+  End If
+Else
+     Debug.Print "Waiting for correct day ...one minute..."
+     Runtime = Now + TimeValue("00:01:00")
+     Application.OnTime Runtime, "Log_data2"
+
+End If
+End Sub
+
+
+
+
+
