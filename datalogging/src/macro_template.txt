@@ -1,4 +1,3 @@
-Fuckin up!
 Private Sub Log_data2()
 Dim c As Object
 Dim tablename As String
