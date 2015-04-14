@@ -1,0 +1,16 @@
+Set objExcel = CreateObject("Excel.Application")
+' next line is path to where the excel workbook is that will log the data
+' need to change extension to .vbs in order to use; for some reason it always executes if I 
+' try to open in eclipse; can't add it to the repository with .vbs extension
+Set objWorkbook = objExcel.Workbooks.Open("C:\Users\mueller\git\data-apps\datalogging\src\SPY190401.xlsm")
+
+objExcel.Application.Visible = True
+
+
+objExcel.Application.Run "SPY190401.xlsm!Log_data2" 
+
+
+
+
+WScript.Echo "Should be logging data now."
+WScript.Quit
