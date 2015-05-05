@@ -8,6 +8,9 @@ Dim startLocation As Range
 ' Set the logging interval next - format is "hh:mm:ss"
 ' Current default is 1 minute
 interval = "00:01:00"
+startTime = "06:28:00"
+endTime = "13:15:00"
+
 
 
 Set startLocation = Range("A1")
@@ -28,10 +31,10 @@ sqlStrng = "insert into " & tablename & " values (DEFAULT, " & TickerLast & ""
 ' Debug.Print sqlStrng
 For Each c In Worksheets("Sheet").Range(startLocation.Offset(2), startLocation.Offset(rowOffset, columnOffset))
     If IsError(c.Value) Then
-        sqlStrng = "2.71828"
+        sqlStrng = "0"
     
     ElseIf c.Value = "N/A" Then
-    sqlStrng = sqlStrng & "," & "3.1459"
+    sqlStrng = sqlStrng & "," & "0"
     Else
     sqlStrng = sqlStrng & "," & c.Value
     End If
@@ -58,7 +61,7 @@ Dim oConn As ADODB.Connection
 'Need to set the proper min and max time values here
 '__________________________________________________________________________
 If Weekday(Now()) <> Saturday Or Weekday(Now()) <> Sunday Then
-   If Time() >= TimeValue("05:00:00") And Time() <= TimeValue("14:30:00") Then
+   If Time() >= TimeValue(startTime) And Time() <= TimeValue(endTime) Then
    oConn.Execute (sqlStrng)
    Else
    End If
@@ -77,22 +80,34 @@ Loop
 ' 4-2-15
 '__________________________________________________________________________
 If Weekday(Now()) <> Saturday Or Weekday(Now()) <> Sunday Then
-  If Time() >= TimeValue("05:00:00") And Time() <= TimeValue("14:30:00") Then
+  If Time() >= TimeValue(startTime) And Time() <= TimeValue(endTime) Then
    Runtime = Now + TimeValue(interval)
    Application.OnTime Runtime, "Log_data2"
    Debug.Print "...Generating Data into MySQL database.   no really, go check..."
   Else
-     Debug.Print "Waiting for correct time...one minute..."
+     Debug.Print "Waiting for correct time...one minute... no not waiting - closing!"
+     Application.Run ("Save_Exit")
      Runtime = Now + TimeValue("00:01:00")
-     Application.OnTime Runtime, "Log_data2"
+     Application.OnTime TimeValue(startTime), "Log_data2"
   End If
 Else
-     Debug.Print "Waiting for correct day ...one minute..."
+     Debug.Print "Waiting for correct day ...one minute... no not waiting - closing app!"
+     Application.Run ("Save_Exit")
      Runtime = Now + TimeValue("00:01:00")
-     Application.OnTime Runtime, "Log_data2"
+     Application.OnTime TimeValue(startTime), "Log_data2"
 
 End If
 End Sub
+
+Private Sub Save_Exit()
+Application.DisplayAlerts = False
+ThisWorkbook.Save
+Application.DisplayAlerts = True
+Application.Quit
+End Sub
+
+
+
 
 
 
